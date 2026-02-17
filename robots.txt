@@ -1,0 +1,7 @@
+# Igniter Training Academy - robots.txt
+# Replace https://www.example.com with your actual domain when deploying.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://www.example.com/sitemap.xml
