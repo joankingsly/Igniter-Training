@@ -220,6 +220,132 @@ body {
   }
 }
 
+/* Banner slider */
+.banner-slider {
+  position: relative;
+  width: 100%;
+  margin: -1.5rem calc(-1 * 1rem) 1.5rem;
+  max-width: calc(100% + 2rem);
+  aspect-ratio: 21 / 9;
+  max-height: 400px;
+  overflow: hidden;
+  border-radius: 0;
+}
+
+@media (min-width: 768px) {
+  .banner-slider {
+    margin: 0 calc(-1 * 1.5rem);
+    max-width: calc(100% + 3rem);
+    border-radius: calc(var(--radius) * 2);
+    margin-bottom: 0;
+  }
+}
+
+.banner-slides {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.banner-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.banner-slide.active {
+  opacity: 1;
+  z-index: 1;
+}
+
+.slider-prev,
+.slider-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--color-text);
+  cursor: pointer;
+  font-size: 1.5rem;
+  line-height: 1;
+  box-shadow: var(--shadow);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slider-prev:hover,
+.slider-prev:focus,
+.slider-next:hover,
+.slider-next:focus {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+.slider-prev {
+  left: 0.75rem;
+}
+
+.slider-next {
+  right: 0.75rem;
+}
+
+.slider-dots {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.slider-dots button {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  min-width: var(--tap-min);
+  min-height: var(--tap-min);
+  margin: -15px -12px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slider-dots button:hover,
+.slider-dots button:focus {
+  background: rgba(255, 255, 255, 0.8);
+}
+
+.slider-dots button[aria-current="true"] {
+  background: var(--color-primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner-slide {
+    transition: none;
+  }
+}
+
 /* Hero */
 .hero {
   text-align: center;

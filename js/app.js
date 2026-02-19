@@ -104,6 +104,96 @@ function setCurrentPageLink() {
 }
 
 /**
+ * Banner slider - run only on index page
+ */
+function initBannerSlider() {
+  const slider = document.querySelector('[data-banner-slider]');
+  if (!slider) return;
+
+  const slides = slider.querySelectorAll('.banner-slide');
+  const prevBtn = slider.querySelector('.slider-prev');
+  const nextBtn = slider.querySelector('.slider-next');
+  const dotBtns = slider.querySelectorAll('.slider-dots button');
+  const total = slides.length;
+  let currentSlide = 0;
+  let autoInterval = null;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function goToSlide(n) {
+    currentSlide = ((n % total) + total) % total;
+    slides.forEach(function (s, i) {
+      s.classList.toggle('active', i === currentSlide);
+      s.setAttribute('aria-current', i === currentSlide ? 'true' : null);
+    });
+    dotBtns.forEach(function (b, i) {
+      b.setAttribute('aria-current', i === currentSlide ? 'true' : null);
+    });
+  }
+
+  function nextSlide() {
+    goToSlide(currentSlide + 1);
+  }
+
+  function prevSlide() {
+    goToSlide(currentSlide - 1);
+  }
+
+  function startAuto() {
+    if (prefersReducedMotion) return;
+    stopAuto();
+    autoInterval = setInterval(nextSlide, 5000);
+  }
+
+  function stopAuto() {
+    if (autoInterval) {
+      clearInterval(autoInterval);
+      autoInterval = null;
+    }
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+      prevSlide();
+      stopAuto();
+    });
+  }
+  if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+      nextSlide();
+      stopAuto();
+    });
+  }
+  dotBtns.forEach(function (btn, i) {
+    btn.addEventListener('click', function () {
+      goToSlide(i);
+      stopAuto();
+    });
+  });
+
+  slider.addEventListener('mouseenter', stopAuto);
+  slider.addEventListener('mouseleave', startAuto);
+  slider.addEventListener('focusin', stopAuto);
+  slider.addEventListener('focusout', function () {
+    if (!slider.contains(document.activeElement)) startAuto();
+  });
+
+  slider.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      prevSlide();
+      stopAuto();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextSlide();
+      stopAuto();
+    }
+  });
+  slider.setAttribute('tabindex', '0');
+
+  startAuto();
+}
+
+/**
  * Show a toast message
  * @param {string} message
  * @param {'success'|'error'|'info'} type
@@ -129,8 +219,10 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', function () {
     initMobileNav();
     setCurrentPageLink();
+    initBannerSlider();
   });
 } else {
   initMobileNav();
   setCurrentPageLink();
+  initBannerSlider();
 }
