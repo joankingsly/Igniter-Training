@@ -141,25 +141,62 @@ body {
   justify-content: center;
   width: var(--tap-min);
   height: var(--tap-min);
-  padding: 0;
-  border: none;
-  background: transparent;
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   color: var(--color-text);
   cursor: pointer;
   border-radius: var(--radius);
-  font-size: 1.5rem;
-  line-height: 1;
+  box-shadow: var(--shadow-sm);
   -webkit-tap-highlight-color: transparent;
 }
 
 .menu-toggle:hover,
 .menu-toggle:focus {
   background: var(--color-bg);
+  border-color: var(--color-primary-light);
   color: var(--color-primary);
 }
 
 .menu-toggle[aria-expanded="true"] {
   background: var(--color-bg);
+  border-color: var(--color-primary);
+}
+
+.menu-toggle__icon {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+  width: 20px;
+  height: 14px;
+}
+
+.menu-toggle__bar {
+  display: block;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle[aria-expanded="true"] .menu-toggle__bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-toggle__bar {
+    transition: none;
+  }
 }
 
 /* Nav - mobile (drawer) */
@@ -340,9 +377,50 @@ body {
   background: var(--color-primary);
 }
 
+.slider-dots button {
+  position: relative;
+  overflow: visible;
+}
+
+.slider-dot-progress {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 20px;
+  margin-left: -10px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 1px;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.slider-dots button[aria-current="true"] .slider-dot-progress::after {
+  content: '';
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--color-primary);
+  animation: slideProgress 5s linear forwards;
+}
+
+.slider-dots button:not([aria-current="true"]) .slider-dot-progress {
+  background: transparent;
+}
+
+@keyframes slideProgress {
+  to {
+    width: 100%;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .banner-slide {
     transition: none;
+  }
+
+  .slider-dots button[aria-current="true"] .slider-dot-progress::after {
+    animation: none;
   }
 }
 
